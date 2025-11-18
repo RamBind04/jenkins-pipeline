@@ -40,6 +40,17 @@ pipeline {
             }
         }
         
+        stage('continue..... ') {
+            input {
+                message "Should be continue"
+                ok "yes, we should"
+            }
+            steps {
+                echo 'Deploying on prod'
+            } 
+            }
+        
+        
         stage('environment_variable_parameters ') {
             steps {
                sh 'echo "${BUILD_ID}"'
@@ -48,4 +59,22 @@ pipeline {
             }
         }
     }
+    post { 
+        always { 
+            echo 'I will always say Hello again!'
+        }
+
+        failure {
+            echo 'Job has failed ❌'
+        }
+    
+        success {
+            echo 'Job passed ✅'
+        }
+        
+        aborted { 
+            echo "Job aborted.."
+        }
+    }
 }
+
