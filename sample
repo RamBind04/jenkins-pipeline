@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+    environment {
+        name = 'Ram bind'
+    }
+    
+    parameters {
+        string (name: 'persion', defaultValue: 'Ram Bind', description: "Who are you")
+        booleanParam (name: 'isMale', defaultValue: 'true', description: "Please select")
+        choice (name: 'City', choices: ['Jaipur','Pune','Mumbai'], description: "Please select")
+    }
+
+    stages {
+        stage('Run a command ') {
+            steps {
+                sh 'date'
+                sh 'pwd'
+                echo 'Bulding'
+            }
+        }
+        
+        stage('check_update ') {
+            steps {
+                echo 'checking update... '
+                sh '''
+                date
+                ls
+                pwd
+                sudo yum check-update || [ $? -eq 100 ]
+                '''
+            }
+        }
+        
+        stage('patch ') {
+            steps {
+                echo 'patching...'
+                sh '''
+                sudo yum update -y 
+                '''
+            }
+        }
+        
+        stage('environment_variable_parameters ') {
+            steps {
+               sh 'echo "${BUILD_ID}"'
+               sh 'echo "My name is : ${name}"'
+               sh 'echo "this is Parameters: ${persion}"'
+            }
+        }
+    }
+}
